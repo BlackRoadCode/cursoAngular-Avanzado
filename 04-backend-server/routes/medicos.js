@@ -9,11 +9,16 @@ const { validarJWT } = require('../middlewares/validar-jwt');
 const router = Router();
 
 // Consultar medicos
-router.get( '/' , getMedicos );
+router.get( '/' , validarJWT, getMedicos );
 
 // Crear medico
 router.post( '/', 
-[] , crearMedico );
+[
+    validarJWT,
+    check('nombre', 'El nombre del médico es obligatorio.').not().isEmpty(),
+    check('hospital', 'El id del hospital no es válido.').isMongoId(),
+    validarCampos
+] , crearMedico );
 
 // Actualizar medico
 router.put( '/:id', 
