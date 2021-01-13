@@ -21,9 +21,13 @@ router.post( '/',
 
 // Actualizar hospital
 router.put( '/:id', 
-[], actualizarHospital );
+[
+    validarJWT,
+    check('nombre', 'El nombre del hospital es obligatorio.').not().isEmpty(),
+    validarCampos
+], actualizarHospital );
 
 // Borrar hospital
-router.delete( '/:id', borrarHospital );
+router.delete( '/:id', validarJWT , borrarHospital );
 
 module.exports = router;

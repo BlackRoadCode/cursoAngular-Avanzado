@@ -22,9 +22,14 @@ router.post( '/',
 
 // Actualizar medico
 router.put( '/:id', 
-[], actualizarMedico );
+[
+    validarJWT,
+    check('nombre', 'El nombre del médico es obligatorio.').not().isEmpty(),
+    // check('hospital', 'El id del hospital no es válido.').isMongoId(),
+    validarCampos
+], actualizarMedico );
 
 // Borrar medico
-router.delete( '/:id', borrarMedico );
+router.delete( '/:id', validarJWT, borrarMedico );
 
 module.exports = router;

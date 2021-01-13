@@ -1,6 +1,7 @@
 
 const { response } = require('express');
 const { generarJWT } = require('../helpers/jwt');
+const hospital = require('../models/hospital');
 
 const Hospital = require('../models/hospital');
 
@@ -44,17 +45,73 @@ const crearHospital = async (req, res = response) => {
 }
 
 const actualizarHospital = async( req, res = response ) =>{
-    res.json({
-        ok:true,
-        msg: 'actualizarHospital'
-    });
+
+    const  hospitalID = req.params.id;
+    const uid = req.uid;
+
+    try {
+        
+        const hospitalDB = await Hospital.findById( hospitalID );
+
+        if ( !hospitalDB ){
+            return res.status(404).json({
+                ok:false,
+                msg: 'Hospital no encontrado'
+            });
+        }
+
+        const cambiosHospital = {
+            ...req.body,
+            usuario:uid
+        };
+
+        const hospitalActualizado = await Hospital.findByIdAndUpdate( hospitalID, cambiosHospital, { new:true } );
+        
+        res.json({
+            ok:true,
+            hospital: hospitalActualizado
+        });
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Error al actualizar el hospital'
+        });
+        
+    }
+
 }
 
 const borrarHospital = async( req, res = response ) => {
-    res.json({
-        ok:true,
-        msg: 'borrarHospital'
-    });
+    const  hospitalID = req.params.id;
+
+    try {
+        
+        const hospitalDB = await Hospital.findById( hospitalID );
+
+        if ( !hospitalDB ){
+            return res.status(404).json({
+                ok:false,
+                msg: 'Hospital no encontrado'
+            });
+        }
+
+        await Hospital.findByIdAndDelete( hospitalID );
+        
+        res.json({
+            ok:true,
+            msg: 'Hospital Eliminado'
+        });
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Error al eliminar el hospital'
+        });
+        
+    }
 }
 
 module.exports = {
