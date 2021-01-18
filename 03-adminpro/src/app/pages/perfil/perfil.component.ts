@@ -33,19 +33,26 @@ export class PerfilComponent implements OnInit {
 
   actualizarPerfil(){
     this._usuarioService.actualizarUsuario( this.perfilForm.value )
-    .pipe( tap( () => {
+    .subscribe( () =>{
+      const { nombre, email } = this.perfilForm.value;
+      this.usuario.nombre = nombre;
+      this.usuario.email = email;
+
       Swal.fire({
         title: 'Datos Actualizados',
         text: 'Tus datos fueron actualizados con éxito.',
         icon: 'success',
         confirmButtonText: 'OK'
       });
-    }
-    ))
-    .subscribe( () =>{
-      const { nombre, email } = this.perfilForm.value;
-      this.usuario.nombre = nombre;
-      this.usuario.email = email;
+
+     }, (err) => {
+
+      Swal.fire({
+        title: 'Error al actualizar',
+        text: err.error.msg,
+        icon: 'error',
+        confirmButtonText: 'OK'
+      });
      });
   }
 
@@ -69,14 +76,21 @@ export class PerfilComponent implements OnInit {
     this._fileUploadService.actualizarFoto( this.imagenSubir, 'usuarios', this.usuario.uid ). then( img => {
       this.usuario.img = img;
       // this._usuarioService.validarToken();
-    }).then( () => 
+
       Swal.fire({
         title: 'Avatar actualizado',
         text: 'La imagen de usuario fue actualizada con éxito.',
         icon: 'success',
         confirmButtonText: 'OK'
-      })
-    );
+      });
+    }).catch( err => {
+      Swal.fire({
+        title: 'Error al actualizar',
+        text: err.error.msg,
+        icon: 'error',
+        confirmButtonText: 'OK'
+      });
+    });
   }
 
 }
