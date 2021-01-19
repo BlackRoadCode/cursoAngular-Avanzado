@@ -17,3 +17,21 @@
     display: flex;
     text-align: center;
 }
+
+.img-avatar{
+    width: 150px;
+    height: auto;
+}
+
+.w100{
+    width: 100px;
+}
+
+.w140{
+    width: 140px;
+}
+
+.avatar{
+    border-radius: 100%;
+    width: 45px;
+}
