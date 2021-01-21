@@ -2,7 +2,7 @@
 
 const { Router } = require('express');
 const { check } = require('express-validator');
-const { getMedicos, crearMedico, actualizarMedico, borrarMedico} = require('../controllers/medicos');
+const { getMedicos, getMedico, crearMedico, actualizarMedico, borrarMedico} = require('../controllers/medicos');
 const { validarCampos } = require('../middlewares/validar-campos');
 const { validarJWT } = require('../middlewares/validar-jwt');
 
@@ -10,6 +10,9 @@ const router = Router();
 
 // Consultar medicos
 router.get( '/' , validarJWT, getMedicos );
+
+// Consultar un médico
+router.get( '/:id' , validarJWT, getMedico );
 
 // Crear medico
 router.post( '/', 

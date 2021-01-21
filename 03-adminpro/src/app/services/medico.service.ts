@@ -28,7 +28,14 @@ export class MedicoService {
     );
   }
 
-  crearMedico( medico:Medico ) {
+  cargarMedico( id:string ){
+    const url = `${ base_url }/medicos/${ id }`;
+    return this._httpClient.get( url, this.headers ).pipe(
+      map( (res:{ ok:boolean, medico:Medico }) => res.medico )
+    );
+  }
+
+  crearMedico( medico:{ nombre:string, hospital:string } ) {
     const url = `${base_url}/medicos`;
     return this._httpClient.post(url, medico , this.headers);
   }
