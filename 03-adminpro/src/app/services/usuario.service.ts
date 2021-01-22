@@ -19,7 +19,7 @@ declare const gapi: any;
 @Injectable({
   providedIn: 'root'
 })
-export class UsuarioService {
+export class UsuarioService { 
 
   public auth2: any;
   public user: Usuario;
@@ -30,6 +30,10 @@ export class UsuarioService {
 
   get token(): string {
     return localStorage.getItem('token') || '';
+  }
+
+  get role(): 'ADMIN_ROLE' | 'USER_ROLE'{
+    return this.user.role;
   }
 
   get uid(): string {
@@ -67,7 +71,7 @@ export class UsuarioService {
         const { nombre, email, img = '', google, role, uid } = res.user;
         // Asignando las propiedades a una nueva instancia de 'Usuario'
         this.user = new Usuario(nombre, email, '', img, google, role, uid);
-        localStorage.setItem('token', res.token);
+        this.guardarStorage( res.token, res.menu );
         return true;
       }),
       catchError(err => of(false))
@@ -77,7 +81,7 @@ export class UsuarioService {
 
   crearUsuario(formData: RegisterForm) {
     return this._httpClient.post(`${base_url}/usuarios`, formData).pipe(tap((res: any) => {
-      localStorage.setItem('token', res.token);
+      this.guardarStorage( res.token, res.menu );
     }));
   }
 
@@ -91,18 +95,20 @@ export class UsuarioService {
 
   loginUsuario(formData: LoginForm) {
     return this._httpClient.post(`${base_url}/login`, formData).pipe(tap((res: any) => {
-      localStorage.setItem('token', res.token);
+      this.guardarStorage( res.token, res.menu );
     }));
   }
 
   loginGoogle(token) {
     return this._httpClient.post(`${base_url}/login/google`, { token }).pipe(tap((res: any) => {
-      localStorage.setItem('token', res.token);
+
+      this.guardarStorage( res.token, res.menu );
     }));
   }
 
   logout() {
     localStorage.removeItem('token');
+    localStorage.removeItem('menu');
 
     this.auth2.signOut().then(() => {
 
@@ -136,6 +142,11 @@ export class UsuarioService {
 
   guardarUsuario(usuario:Usuario) {
     return this._httpClient.put(`${base_url}/usuarios/${usuario.uid}`, usuario, this.headers );
+  }
+
+  guardarStorage( token:string, menu:any ){
+    localStorage.setItem('token', token);
+    localStorage.setItem('menu', JSON.stringify(menu));
   }
 
 }

@@ -14,11 +14,11 @@ export class RegisterComponent {
   public formSubmitted = false;
 
   public registerForm = this._formBuilder.group({
-    nombre: ['Pepe', [ Validators.required, Validators.minLength(3) ] ],
-    email: [ 'mail100@mail.com', [ Validators.required, Validators.email ] ],
-    password: [ '12345', [ Validators.required ] ],
-    password2: [ '12345', [ Validators.required ] ],
-    terminos: [ true, [ Validators.required ] ]
+    nombre: ['', [ Validators.required, Validators.minLength(3) ] ],
+    email: [ '', [ Validators.required, Validators.email ] ],
+    password: [ '', [ Validators.required ] ],
+    password2: [ '', [ Validators.required ] ],
+    terminos: [ false, [ Validators.required ] ]
   }, {
     validators: this.passwordsIguales('password', 'password2')
   });

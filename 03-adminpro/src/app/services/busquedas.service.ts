@@ -54,4 +54,9 @@ export class BusquedasService {
       })
     )
   }
+
+  buscarByTerm( termino:string ){
+    const url = `${base_url}/todo/${ termino }`;
+    return this._httpClient.get( url, this.headers );
+  }
 }
