@@ -43,7 +43,7 @@ import { BusquedaComponent } from './busqueda/busqueda.component';
     FormsModule,
     ReactiveFormsModule,
     ComponentsModule,
-    PipesModule
+    PipesModule 
   ],
   exports:[
     DashboardComponent,
