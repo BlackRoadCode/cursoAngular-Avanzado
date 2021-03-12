@@ -18,7 +18,7 @@ const routes: Routes = [
     AuthRoutingModule
   ],
   exports:[
-    RouterModule
+    RouterModule 
   ]
 })
 export class AppRoutingModule { }
